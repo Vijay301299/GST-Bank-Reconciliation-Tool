@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Reconciliation Tool — VJ GST &amp; Tax Consultancy</title>
+<meta name="description" content="A free, browser-only tool for GST portal-vs-books and bank-vs-books reconciliation. Built by a practicing GST practitioner. No server, no uploads, nothing stored.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#111111; --card:#1a1a1a; --card-2:#151515;
+    --gold:#c9a84c; --gold-deep:#8a7233;
+    --ink:#e8e8e8; --ink-soft:#cccccc; --muted:#888888;
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'IBM Plex Sans',-apple-system,sans-serif;
+    --mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* Nav */
+  nav{position:sticky;top:0;z-index:20;background:rgba(17,17,17,.9);backdrop-filter:blur(8px);border-bottom:1px solid #232323}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:16px;padding-bottom:16px}
+  .brand{font-family:var(--serif);font-weight:600;font-size:17px;letter-spacing:.01em}
+  .brand span{color:var(--gold)}
+  .nav-cta{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--gold);border:1px solid var(--gold-deep);padding:8px 16px;border-radius:2px;text-decoration:none;white-space:nowrap;transition:background .15s,color .15s}
+  .nav-cta:hover{background:var(--gold);color:#111}
+
+  /* Hero */
+  header.hero{padding:96px 0 72px;border-bottom:1px solid #232323}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:22px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5.2vw,58px);line-height:1.08;letter-spacing:-.01em;max-width:14ch}
+  h1 em{font-style:italic;color:var(--gold);font-weight:500}
+  .sub{font-size:17px;color:var(--ink-soft);max-width:52ch;margin:24px 0 36px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:64px}
+  .btn{font-family:var(--sans);font-weight:600;font-size:14.5px;padding:14px 26px;border-radius:2px;text-decoration:none;display:inline-block;transition:transform .12s,background .15s}
+  .btn-primary{background:var(--gold);color:#111}
+  .btn-primary:hover{background:#dbb95e;transform:translateY(-1px)}
+  .btn-ghost{border:1px solid #333;color:var(--ink-soft)}
+  .btn-ghost:hover{border-color:var(--gold-deep);color:var(--gold)}
+
+  /* Tally signature element */
+  .tally{border:1px solid #262626;background:var(--card-2);border-radius:3px;overflow:hidden}
+  .tally-head{display:grid;grid-template-columns:1fr 1fr 46px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:12px 18px;border-bottom:1px solid #262626}
+  .tally-row{display:grid;grid-template-columns:1fr 1fr 46px;align-items:center;padding:13px 18px;font-family:var(--mono);font-size:13.5px;border-bottom:1px solid #1d1d1d;opacity:0;transform:translateY(6px);animation:rise .5s ease forwards}
+  .tally-row span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tally-row:last-child{border-bottom:none}
+  .tally-row span:first-child{color:var(--ink-soft)}
+  .tally-row span:nth-child(2){color:var(--ink-soft)}
+  .mark{text-align:center;font-size:15px}
+  .mark.ok{color:#7fbf7f}
+  .mark.no{color:#c96a5a}
+  .tally-row.miss span:nth-child(2){color:var(--muted)}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  .tally-row:nth-child(1){animation-delay:.05s}
+  .tally-row:nth-child(2){animation-delay:.2s}
+  .tally-row:nth-child(3){animation-delay:.35s}
+  .tally-row:nth-child(4){animation-delay:.5s}
+  @media (prefers-reduced-motion: reduce){.tally-row{animation:none;opacity:1;transform:none}}
+
+  /* Section */
+  section{padding:72px 0;border-bottom:1px solid #232323}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(24px,3vw,32px);letter-spacing:-.01em;margin-bottom:20px;max-width:22ch}
+  .lead{font-size:16px;color:var(--ink-soft);max-width:62ch}
+  .lead + .lead{margin-top:14px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:36px}
+  @media (max-width:720px){.grid2{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid #262626;border-radius:3px;padding:28px}
+  .card h3{font-family:var(--serif);font-weight:600;font-size:19px;margin-bottom:10px;color:var(--gold)}
+  .card p{font-size:14.5px;color:var(--ink-soft)}
+
+  .privacy-box{background:var(--card);border:1px solid var(--gold-deep);border-radius:3px;padding:28px 32px;margin-top:32px}
+  .privacy-box p{font-size:14.5px;color:var(--ink-soft);margin-top:10px}
+  .privacy-box p:first-child{margin-top:0}
+  .privacy-box strong{color:var(--ink)}
+
+  .steps{margin-top:36px;display:flex;flex-direction:column}
+  .step{display:grid;grid-template-columns:52px 1fr;gap:18px;padding:20px 0;border-top:1px solid #232323}
+  .step:last-child{padding-bottom:0}
+  .step-num{font-family:var(--mono);font-size:13px;color:var(--gold);padding-top:2px}
+  .step h4{font-family:var(--sans);font-weight:600;font-size:15.5px;margin-bottom:4px}
+  .step p{font-size:14px;color:var(--muted)}
+
+  .final{text-align:center;padding:88px 0;border-bottom:none}
+  .final h2{margin:0 auto 16px;max-width:16ch}
+  .final .lead{margin:0 auto 32px;text-align:center}
+
+  footer{padding:40px 0 56px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;font-size:13px;color:var(--muted)}
+  footer a{color:var(--gold);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  .foot-cred{font-family:var(--mono);font-size:12px}
+
+  /* ===== Mobile (≤640px) ===== */
+  @media (max-width:640px){
+    .wrap{padding:0 18px}
+    nav .wrap{padding-top:13px;padding-bottom:13px}
+    .brand{font-size:14px}
+    .nav-cta{padding:7px 12px;font-size:11px}
+    header.hero{padding:52px 0 44px}
+    .hero-grid{grid-template-columns:1fr;gap:36px}
+    .eyebrow{font-size:11px;margin-bottom:16px}
+    h1{font-size:clamp(28px,8.5vw,38px);max-width:100%}
+    .sub{font-size:15.5px;margin:18px 0 28px}
+    .cta-row{margin-bottom:0}
+    .btn{width:100%;text-align:center}
+    .tally-row{grid-template-columns:1fr 1fr 28px;padding:11px 14px;font-size:11.5px}
+    .tally-head{padding:10px 14px;font-size:10px}
+    section{padding:48px 0}
+    .kicker{font-size:11px}
+    h2{font-size:clamp(21px,6.5vw,26px);max-width:100%}
+    .lead{font-size:15px}
+    .card{padding:22px}
+    .card h3{font-size:17px}
+    .privacy-box{padding:22px 20px}
+    .step{grid-template-columns:36px 1fr;gap:12px;padding:16px 0}
+    .final{padding:64px 0}
+    footer{padding:32px 0 44px}
+    footer .wrap{flex-direction:column;gap:16px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">VJ GST <span>&amp;</span> Tax Consultancy</div>
+    <a class="nav-cta" href="app.html">Launch the tool →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Free tool · GST &amp; Bank reconciliation</div>
+      <h1>Reconciliation, the way it should feel: <em>certain.</em></h1>
+      <p class="sub">Match your GST portal data against your books, or your bank statement against your ledger — right in your browser, in minutes. No files ever leave your device.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="app.html">Launch the tool</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+    </div>
+    <div class="tally" aria-hidden="true">
+      <div class="tally-head"><span>Portal</span><span>Books</span><span></span></div>
+      <div class="tally-row"><span>INV-2201 · ₹42,000</span><span>INV-2201 · ₹42,000</span><span class="mark ok">✓</span></div>
+      <div class="tally-row"><span>INV-2202 · ₹18,500</span><span>INV-2202 · ₹18,500</span><span class="mark ok">✓</span></div>
+      <div class="tally-row miss"><span>INV-2203 · ₹9,200</span><span>—</span><span class="mark no">✕</span></div>
+      <div class="tally-row"><span>INV-2204 · ₹31,760</span><span>INV-2204 · ₹31,760</span><span class="mark ok">✓</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="why">
+  <div class="wrap">
+    <div class="kicker">Why this exists</div>
+    <h2>Built by a practitioner, not a product team.</h2>
+    <p class="lead">Every month, GST reconciliation comes down to the same thing: two spreadsheets, one from the portal and one from the books, and hours spent matching invoice numbers by eye. I built this tool for my own consultancy work first — a way to run that match reliably, see exactly why something didn't tie out, and export a clean report without opening a single third-party dashboard.</p>
+    <p class="lead">It's now free for any practitioner or business to use. The matching logic is a deterministic rule engine — every result is explainable. AI is entirely optional, used only if you choose to add an API key, and only for plain-language observations layered on top of results the rule engine already produced.</p>
+  </div>
+</section>
+
+<section id="what">
+  <div class="wrap">
+    <div class="kicker">What it does</div>
+    <h2>Two reconciliations, one tool.</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>GST Reconciliation</h3>
+        <p>Match GSTR-2B / portal data against your books by invoice number, GSTIN, date, and tax amount. Get duplicate detection on both sides, configurable tolerances, and a clear exception list for anything that doesn't tie out.</p>
+      </div>
+      <div class="card">
+        <h3>Bank Reconciliation</h3>
+        <p>Match your bank statement against your ledger by date and amount. Paste, upload a CSV/Excel file, or drag and drop — then export a clean, audit-ready PDF report.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="wrap">
+    <div class="kicker">How your data is handled</div>
+    <h2>Nothing you upload ever leaves your browser.</h2>
+    <div class="privacy-box">
+      <p><strong>There is no server and no database behind this tool.</strong> Every file you paste, upload, or drag in is parsed entirely by JavaScript running in your own browser tab.</p>
+      <p>If you choose to add an Anthropic API key for AI-generated observations, only a small statistical summary and a sample of mismatched rows are sent — directly from your browser to Anthropic's API, never through a server of ours. This is entirely optional; the tool is fully functional without it.</p>
+      <p>Nothing is logged, stored, or retained. Close the tab, and it's gone.</p>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="kicker">Getting started</div>
+    <h2>Five steps, start to export.</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">01</div><div><h4>Choose GST or Bank reconciliation</h4><p>Pick the mode that matches what you're reconciling.</p></div></div>
+      <div class="step"><div class="step-num">02</div><div><h4>Load both sources</h4><p>Paste directly, upload a CSV/Excel file, or drag and drop.</p></div></div>
+      <div class="step"><div class="step-num">03</div><div><h4>Map your columns</h4><p>Tell the tool which column is which — it remembers the mapping for the session.</p></div></div>
+      <div class="step"><div class="step-num">04</div><div><h4>Run the reconciliation</h4><p>Review matched, partially matched, and exception rows, each with a plain-English remark.</p></div></div>
+      <div class="step"><div class="step-num">05</div><div><h4>Export</h4><p>Download as Excel, CSV, or a PDF audit report — ready to file or send to a client.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Confident it fits your workflow?</h2>
+    <p class="lead">Open it, load a sample month, and see the matching for yourself.</p>
+    <a class="btn btn-primary" href="app.html">Launch the tool →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-cred">
+      J. Vijayasuryan Jaisankar · VJ GST &amp; Tax Consultancy<br>
+      Govt. of India Certified GST Practitioner · Enrolment No. 332500009598GPC
+    </div>
+    <div>
+      <a href="mailto:suryavijay3012@gmail.com">suryavijay3012@gmail.com</a> ·
+      <a href="https://www.linkedin.com/in/vijaya-suryan" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="LICENSE">License</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
