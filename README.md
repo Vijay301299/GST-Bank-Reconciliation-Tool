@@ -8,8 +8,7 @@ Bank (Statement vs. Books) matching — built for tax practitioners and
 accountants who need a fast, private way to reconcile records without
 uploading client data anywhere.
 
-**🔗 Live site:** `https://<your-github-username>.github.io/<repo-name>/`
-*(update this link once GitHub Pages is live)*
+**🔗 Live site:** [vijay301299.github.io/GST-Bank-Reconciliation-Tool](https://vijay301299.github.io/GST-Bank-Reconciliation-Tool/)
 
 The site has two pages:
 - **`index.html`** — a landing page explaining what the tool does, how your data is handled, and how to use it
@@ -96,5 +95,5 @@ See [LICENSE](./LICENSE) for details.
 
 **J. Vijayasuryan Jaisankar**
 GST Practitioner · VJ GST & Tax Consultancy
-📧 suryavijay3012@gmail.com
+📧 vj.gst.tax@gmail.com
 🔗 [LinkedIn](https://www.linkedin.com/in/vijaya-suryan)
